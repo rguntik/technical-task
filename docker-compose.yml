@@ -1,0 +1,26 @@
+version: '2'
+services:
+    nginx:
+        image: nginx:latest
+        container_name: rguntik_nginx
+        volumes:
+            - ./hosts:/etc/nginx/conf.d
+            - ./www:/var/www
+        links:
+            - php
+        networks:
+            static-network:
+                ipv4_address: 172.11.128.1
+    php:
+        build:
+            context: ./images/php
+        container_name: rguntik_php
+        volumes:
+            - ./www:/var/www
+        networks:
+            - static-network
+networks:
+    static-network:
+        ipam:
+            config:
+                - subnet: 172.11.0.0/16
